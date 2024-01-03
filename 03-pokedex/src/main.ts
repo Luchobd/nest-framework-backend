@@ -12,9 +12,14 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true, // tranforma la data de los dto a loque se requiera, es decir en este caso el valor llega como string pero en el dto lo declaro como number y llegara como number.
+      transformOptions: {
+        enableImplicitConversion: true, // tranforma la data de los dto a loque se requiera, es decir en este caso el valor llega como string pero en el dto lo declaro como number y llegara como number.
+      },
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
+  console.log(`App running on port ${process.env.PORT}`);
 }
 bootstrap();
