@@ -1,9 +1,11 @@
+import { ProductImage } from './product-image.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   // BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -46,11 +48,20 @@ export class Product {
   @Column('text')
   gender: string;
 
-  @Column('text',{
+  @Column('text', {
     array: true,
-    default: []
+    default: [],
   })
   tags: string[];
+
+  // !Creando una relación de (Uno a Muchos) con Product to Product Image
+  // images
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    cascade: true,
+    eager: true,
+    // onDelete: 'CASCADE',
+  })
+  images?: ProductImage[];
 
   @BeforeInsert()
   checkSlugInsert() {
@@ -72,6 +83,3 @@ export class Product {
       .replaceAll("'", '');
   }
 }
-
-
-// images
