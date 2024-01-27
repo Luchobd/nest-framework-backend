@@ -1,3 +1,4 @@
+import { User } from '../../auth/entities/user.entity';
 import { ProductImage } from './product-image.entity';
 import {
   BeforeInsert,
@@ -5,11 +6,14 @@ import {
   // BeforeUpdate,
   Column,
   Entity,
+  // JoinColumn,
+  ManyToOne,
   OneToMany,
+  // OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'products' }) // ! {name: 'products'} es para cambiar el nombre de la tabla en la base de datos, es decir, si no se pone, por defecto se crea la tabla con el nombre de la clase, en este caso 'Product'.
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -62,6 +66,17 @@ export class Product {
     // onDelete: 'CASCADE',
   })
   images?: ProductImage[];
+
+  @ManyToOne(
+    () => User,
+    (user) => user.product,
+    {eager: true}
+  )
+  user: User
+
+  // @OneToOne(() => User, user => user.product)
+  // @JoinColumn()
+  // user: User;
 
   @BeforeInsert()
   checkSlugInsert() {
